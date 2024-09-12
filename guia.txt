@@ -1,0 +1,200 @@
+1) npx create-expo-app@latest .
+2) npm run reset-project
+ borrar
+        -- todos lo que esta dentro de components
+        -- las carpetas hooks y scripts
+        eliminamos la linea 7 del package.jon
+           "reset-project": "node ./scripts/reset-project.js",
+        Cambiar a jsx los tsx que esta dentro de app
+
+3) agregar el los estilos css para los botones genericos como los de bootstrap en Colors.ts *
+
+4) en la carpeta components
+    agregar el CustomButton.tsx para usarlo momo molde para los botones configurables  **
+5)
+
+
+
+
+
+
+
+
+
+*
+Colors.ts
+const tintColorLight = '#0a7ea4';
+const tintColorDark = '#fff';
+export const Colors = {
+  light: {
+    text: '#11181C',
+    background: '#fff',
+    tint: tintColorLight,
+    icon: '#687076',
+    tabIconDefault: '#687076',
+    tabIconSelected: tintColorLight,
+  },
+  dark: {
+    text: '#ECEDEE',
+    background: '#34495e',
+    tint: tintColorDark,
+    icon: '#9BA1A6',
+    tabIconDefault: '#9BA1A6',
+    tabIconSelected: tintColorDark,
+  },
+
+  button: {
+    primary: {
+      backgroundColor: '#0d6efd',
+      borderColor: '#0d6efd',
+      color: '#fff',
+    },
+    secondary: {
+      backgroundColor: '#6c757d',
+      borderColor: '#6c757d',
+      color: '#fff',
+    },
+    success: {
+      backgroundColor: '#198754',
+      borderColor: '#198754',
+      color: '#fff',
+    },
+    danger: {
+      backgroundColor: '#dc3545',
+      borderColor: '#dc3545',
+      color: '#fff',
+    },
+    warning: {
+      backgroundColor: '#ffc107',
+      borderColor: '#ffc107',
+      color: '#000',
+    },
+    info: {
+      backgroundColor: '#0dcaf0',
+      borderColor: '#0dcaf0',
+      color: '#000',
+    },
+    light: {
+      backgroundColor: '#f8f9fa',
+      borderColor: '#f8f9fa',
+      color: '#000',
+    },
+    dark: {
+      backgroundColor: '#212529',
+      borderColor: '#212529',
+      color: '#fff',
+    },
+  },
+  outline: {
+    primary: {
+      borderColor: '#0d6efd',
+      color: '#0d6efd',
+    },
+    secondary: {
+      borderColor: '#6c757d',
+      color: '#6c757d',
+    },
+    success: {
+      borderColor: '#198754',
+      color: '#198754',
+    },
+    danger: {
+      borderColor: '#dc3545',
+      color: '#dc3545',
+    },
+    warning: {
+      borderColor: '#ffc107',
+      color: '#ffc107',
+    },
+    info: {
+      borderColor: '#0dcaf0',
+      color: '#0dcaf0',
+    },
+    light: {
+      borderColor: '#f8f9fa',
+      color: '#f8f9fa',
+    },
+    dark: {
+      borderColor: '#212529',
+      color: '#212529',
+    },
+  },
+};
+  
+
+**
+// CustomButton.tsx
+import React from 'react';
+import { Pressable, Text, StyleSheet } from 'react-native';
+import { Colors } from '../constants/Colors'; // Asegúrate de que la ruta sea correcta
+
+interface CustomButtonProps {
+  title: string;
+  onPress: () => void;
+  type?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'; // Tipos de botón
+  outline?: boolean; // Si es un botón de borde
+  width?: number | string; // Ancho del botón
+  margin?: number | string; // Margen del botón
+  fontSize?: number; // Tamaño de la fuente
+}
+
+const CustomButton: React.FC<CustomButtonProps> = ({
+  title,
+  onPress,
+  type = 'primary',
+  outline = false,
+  width, // Añadir la propiedad width
+  margin, // Añadir la propiedad margin
+  fontSize = 16, // Tamaño de fuente por defecto
+}) => {
+  // Estilos de botón según el tipo y si es outline
+  const buttonStyles = outline
+    ? {
+        backgroundColor: 'transparent',
+        borderColor: Colors.outline[type].borderColor,
+        color: Colors.outline[type].color,
+      }
+    : {
+        backgroundColor: Colors.button[type].backgroundColor,
+        borderColor: Colors.button[type].borderColor,
+        color: Colors.button[type].color,
+      };
+
+  return (
+    <Pressable
+      style={({ pressed }) => [
+        styles.button,
+        { 
+          borderColor: buttonStyles.borderColor, 
+          backgroundColor: buttonStyles.backgroundColor,
+          width: width, // Aplicar el ancho aquí
+          margin: margin, // Aplicar el margen aquí
+        },
+        pressed && styles.pressed,
+      ]}
+      onPress={onPress}
+    >
+      <Text style={{ color: buttonStyles.color, fontWeight: 'bold', fontSize: fontSize }}>{title}</Text>
+    </Pressable>
+  );
+};
+
+const styles = StyleSheet.create({
+  button: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1, // Asegúrate de que el borde se aplique
+  },
+  pressed: {
+    opacity: 0.7,
+  },
+});
+
+export default CustomButton;
+
+
+
+  
